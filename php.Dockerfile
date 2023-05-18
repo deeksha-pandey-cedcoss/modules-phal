@@ -5,6 +5,11 @@ ARG PHALCON_VERSION=4.0.2
 ARG PHALCON_EXT_PATH=php7/64bits
 RUN docker-php-ext-install mysqli pdo pdo_mysql
 
+RUN apt-get update
+RUN apt-get install -y libcurl4-openssl-dev ssh nano pkg-config libssl-dev
+# RUN pecl install mongodb xdebug-2.9.2 && docker-php-ext-enable mongodb xdebug
+RUN pecl install mongodb && docker-php-ext-enable mongodb
+
 RUN set -xe && \
     # Download PSR, see https://github.com/jbboehr/php-psr
     curl -LO https://github.com/jbboehr/php-psr/archive/v${PSR_VERSION}.tar.gz && \

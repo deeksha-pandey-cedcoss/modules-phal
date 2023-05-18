@@ -1,0 +1,9 @@
+<?php
+echo "<h1><u>Hello Admin Welcome to Admin- Navigation</u></h1>";
+echo PHP_EOL;
+// link to signup page
+
+echo $this->tag->linkTo(['index', 'Home Page User!', 'class' => 'btn btn-info m-3']);
+echo $this->tag->linkTo(['../admin/login/index', 'Login Page!', 'class' => 'btn btn-info m-3']);
+echo $this->tag->linkTo(['../admin/product/index', 'Add Products!', 'class' => 'btn btn-info m-3']);
+echo $this->tag->linkTo(['../admin/product/view', 'View Products!', 'class' => 'btn btn-info m-3']);

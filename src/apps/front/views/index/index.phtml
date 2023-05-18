@@ -1,0 +1,7 @@
+<?php
+echo "<h1><u>Hello User Welcome to Frontend- Navigation</u></h1>";
+echo PHP_EOL;
+// link to signup page
+
+echo $this->tag->linkTo(['index', 'Home Page!', 'class' => 'btn btn-info m-3']);
+echo $this->tag->linkTo(['product/index', 'View Products!', 'class' => 'btn btn-primary m-3']);

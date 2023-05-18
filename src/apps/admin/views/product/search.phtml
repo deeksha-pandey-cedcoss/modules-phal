@@ -1,0 +1,22 @@
+<h1 class="text-center"><u>Search List</u></h1>
+
+<?php
+
+echo "<table class='table table-success table-striped'> <tr><th> Name </th><th>Category Name</th>
+        <th>Price</th><th>Stock</th>
+        </tr>";
+
+
+foreach ($data as $current) {
+    echo "<tr><td>$current[name]</td><td>$current[category]</td><td>$current[price]</td><td>$current[stock]</td>
+<td>$current[attriprice]</td></tr>";
+}
+
+echo "</tbody></table>";
+echo $this->tag->linkTo(
+    ['../admin/product/view',
+    'view Up Here!',"class"=>"btn btn-info"]
+);
+
+echo $this->tag->linkTo(['../admin/product/view', 'View Products!','class' => 'btn btn-info m-3']);
+echo $this->tag->linkTo(['../admin/index/index', 'Home Page Admin!','class' => 'btn btn-info ']);

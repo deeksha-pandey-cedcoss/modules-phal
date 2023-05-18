@@ -5,14 +5,20 @@ use Phalcon\Loader;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\Application;
 use Phalcon\Url;
-use Phalcon\Db\Adapter\Pdo\Mysql;
 use Phalcon\Config;
+use Phalcon\Mvc\Router;
+use Phalcon\Logger;
+use Phalcon\Logger\Adapter\Stream;
 
 $config = new Config([]);
 
 // Define some absolute path constants to aid in locating resources
 define('BASE_PATH', dirname(__DIR__));
-define('APP_PATH', BASE_PATH . '/app');
+define('APP_PATH', BASE_PATH . '/apps');
+
+require_once BASE_PATH . '/vendor/autoload.php';
+
+
 
 // Register an autoloader
 $loader = new Loader();
@@ -46,32 +52,66 @@ $container->set(
     }
 );
 
-$application = new Application($container);
-
-
-
 $container->set(
-    'db',
+    'router',
     function () {
-        return new Mysql(
+        $router = new Router();
+
+        $router->setDefaultModule('front');
+        $router->add(
+            '/admin/:controller/:action/:params',
             [
-                'host'     => 'mysql-server',
-                'username' => 'root',
-                'password' => 'secret',
-                'dbname'   => 'phalt',
-                ]
-            );
-        }
+                'module'     => 'admin',
+                'controller' => 1,
+                'action'     => 2,
+                'params'     => 3,
+            ]
+        );
+        return $router;
+    }
 );
 
 $container->set(
     'mongo',
     function () {
-        $mongo = new MongoClient();
+        $mongo = new MongoDB\Client(
+            'mongodb+srv://deekshapandey:Deeksha123@cluster0.whrrrpj.mongodb.net/?retryWrites=true&w=majority'
+        );
 
-        return $mongo->selectDB('phalt');
+        return $mongo->store;
     },
     true
+);
+
+$container->set(
+    'log',
+    function () {
+
+        $adapter = new Stream(APP_PATH . '/storage/logs/main.log');
+        return new Logger(
+            'messages',
+            [
+                'main' => $adapter,
+            ]
+        );
+    },
+    true
+);
+
+
+$application = new Application($container);
+
+$application->registerModules(
+    [
+        'front' => [
+            'className' => \Multi\Front\Module::class,
+            'path'      => APP_PATH . '/front/Module.php',
+        ],
+        'admin'  => [
+            'className' => \Multi\Admin\Module::class,
+            'path'      => APP_PATH . '/admin/Module.php',
+        ]
+    ]
 );
 
 try {
